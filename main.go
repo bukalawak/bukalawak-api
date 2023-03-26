@@ -44,20 +44,18 @@ func main() {
 		postId, err := strconv.Atoi(chi.URLParam(r, "postId"))
 		if err != nil {
 			w.WriteHeader(404)
+			io.WriteString(w, "Not Found")
 			return
 		}
+
+		// sanitize
 		postId = postId - 1
-		if postId < 0 {
+		if postId < 0 || postId >= len(posts) {
 			w.WriteHeader(404)
 			io.WriteString(w, "Not Found")
 			return
 		}
 
-		if postId >= len(posts) {
-			w.WriteHeader(404)
-			io.WriteString(w, "Not Found")
-			return
-		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(posts[postId])
 	})
