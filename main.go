@@ -63,6 +63,7 @@ func main() {
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
+	fmt.Println("Bukalawak API Ready to serve")
 }
 
 type Post struct {
