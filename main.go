@@ -6,16 +6,19 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
 	fmt.Println("Run Bukalawak API")
 
-	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	router := chi.NewRouter()
+
+	router.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Pong")
 	})
-
-	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+	router.Get("/posts", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		posts := [3]Post{
 			{
@@ -34,7 +37,7 @@ func main() {
 		json.NewEncoder(w).Encode(posts)
 	})
 
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
 }
